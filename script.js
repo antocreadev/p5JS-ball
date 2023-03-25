@@ -29,7 +29,9 @@ function mouseDragged() {
   }
 }
 
-function mouseClicked() {
+// mouseClicked() -> fonctionne que sur pc 
+// touchEnded() -> mobile et pc 
+function touchEnded() {
   print("click");
   tab.forEach((ball, index) => {
     let d = dist(mouseX, mouseY, ball.x - ball.r, ball.y - ball.r);
