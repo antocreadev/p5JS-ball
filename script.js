@@ -1,9 +1,9 @@
 var tab = [];
 function setup() {
-  createCanvas(windowWidth, windowHeight );
+  createCanvas(windowWidth, windowHeight);
   background(100);
   //creation de la balle par instatiation de la classe Ball
-  for (let i = 0; i < random(10, 1000); i++) {
+  for (let i = 0; i < random(0, 10); i++) {
     tab[i] = new Ball(windowWidth / 4, windowHeight / 4, 80);
   }
 }
@@ -17,12 +17,33 @@ function draw() {
   });
 }
 
+function mouseDragged() {
+  print("mouse dragged");
+  for (let index = 0; index < tab.length; index++) {
+    const element = tab[index];
+    let d = dist(mouseX, mouseY, element.x - element.r, element.y - element.r);
+    if (d <= element.r) {
+      element.x = mouseX + element.r;
+      element.y = mouseY + element.r;
+    }
+  }
+}
+
 function mouseClicked() {
+  print("click");
   tab.forEach((ball, index) => {
-    let d = dist(mouseX, mouseY, ball.x, ball.y);
+    let d = dist(mouseX, mouseY, ball.x - ball.r, ball.y - ball.r);
+
     if (d <= ball.r) {
+      print(d, ball.r);
       tab.splice(index, 1);
     }
+  });
+}
+
+function keyPressed() {
+  tab.forEach((ball) => {
+    ball.moved = !ball.moved;
   });
 }
 
@@ -33,6 +54,7 @@ class Ball {
     this.green = random(255);
     this.blue = random(255);
     this.alpha = random(100, 200);
+    // this.move = true;
 
     //position axe x
     this.x = pos_x;
@@ -41,6 +63,9 @@ class Ball {
     //rayon
     this.r = d / 2;
     //vitesse
+
+    this.moved = true;
+
     let vitesse = random(0, 1);
     if (vitesse <= 0.5) {
       this.speed_x = random(1, 5);
@@ -51,23 +76,27 @@ class Ball {
     }
   }
   move() {
-    this.x = this.x + this.speed_x;
-    this.y = this.y + this.speed_y;
+    if (this.moved == true) {
+      this.x = this.x + this.speed_x;
+      this.y = this.y + this.speed_y;
 
-    //test sur bord gauche et droit
-    if (this.x >= width || this.x < this.r * 2) {
-      this.speed_x = -this.speed_x;
-    }
-    //test sur bord haut et bas
-    if (this.y >= height || this.y < this.r * 2) {
-      this.speed_y = -this.speed_y;
+      //test sur bord gauche et droit
+      if (this.x >= width || this.x < this.r * 2) {
+        this.speed_x = -this.speed_x;
+      }
+      //test sur bord haut et bas
+      if (this.y >= height || this.y < this.r * 2) {
+        this.speed_y = -this.speed_y;
+      }
     }
   }
 
   show() {
-    noStroke();
-
-    fill(this.red, this.green, this.blue, this.alpha);
+    noStroke(); // pas de bordure
+    fill(this.red, this.green, this.blue, this.alpha); // couleur
+    // beginShape();
+    // créer un cercle largeur x et haut y, this - r permet de mettre le point d'encrage au milieu du cercle
     circle(this.x - this.r, this.y - this.r, this.r * 2);
+    // beginShape();
   }
 }
