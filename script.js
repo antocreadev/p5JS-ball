@@ -3,7 +3,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(100);
   //creation de la balle par instatiation de la classe Ball
-  for (let i = 0; i < random(0, 10); i++) {
+  for (let i = 0; i < random(0, 1000); i++) {
     tab[i] = new Ball(windowWidth / 4, windowHeight / 4, 80);
   }
 }
